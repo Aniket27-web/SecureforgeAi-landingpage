@@ -28,5 +28,5 @@ export const DEFAULT_TIMING_CONFIG: TimingConfig = {
   secondGlitchDuration: 450,
   modernRecoveryDuration: 750,
   autoLoop: true,
-  loopInterval: 15000,
+  loopInterval: 30000,
 };
