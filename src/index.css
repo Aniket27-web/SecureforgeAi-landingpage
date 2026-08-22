@@ -1,0 +1,273 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Outfit', 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    
+    /* Modern Clean White & Blue Palette */
+    --bg-main: #FFFFFF;
+    --bg-subtle: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --border-light: #E2E8F0;
+    --border-blue: #BFDBFE;
+
+    --brand-blue: #2563EB;
+    --brand-blue-hover: #1D4ED8;
+    --brand-blue-light: #EFF6FF;
+    --brand-cyan: #0284C7;
+
+    --text-heading: #0F172A;
+    --text-body: #334155;
+    --text-muted: #64748B;
+
+    /* Retro CRT theme variables */
+    --crt-bg: #040704;
+    --crt-panel: #081208;
+    --crt-panel-border: rgba(0, 255, 102, 0.25);
+    --crt-green: #00ff66;
+    --crt-bright-green: #33ff77;
+    --crt-amber: #ffb000;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-main);
+    color: var(--text-body);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Clean Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #F1F5F9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+  }
+}
+
+/* Typography */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Modern Clean Card Styles */
+.modern-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modern-card:hover {
+  border-color: #93C5FD;
+  box-shadow: 0 6px 18px -4px rgba(37, 99, 235, 0.08);
+}
+
+.modern-card-elevated {
+  background-color: #FFFFFF;
+  border: 1px solid #DBEAFE;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px -6px rgba(37, 99, 235, 0.1);
+}
+
+/* Retro CRT Terminal Classes */
+.terminal-panel {
+  background-color: #081208;
+  border-color: rgba(0, 255, 102, 0.25);
+}
+
+.terminal-panel-amber {
+  background-color: #0d0a04;
+  border-color: rgba(255, 176, 0, 0.3);
+}
+
+.term-btn {
+  background-color: #081208;
+  border: 1px solid rgba(0, 255, 102, 0.4);
+  color: #00ff66;
+  transition: all 0.2s ease;
+}
+.term-btn:hover {
+  background-color: rgba(0, 255, 102, 0.15);
+  border-color: #00ff66;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+.term-btn-primary {
+  background-color: #00ff66;
+  color: #040704;
+  font-weight: bold;
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+  transition: all 0.2s ease;
+}
+.term-btn-primary:hover {
+  background-color: #33ff77;
+  box-shadow: 0 0 25px rgba(0, 255, 102, 0.7);
+  transform: translateY(-1px);
+}
+
+.term-btn-amber {
+  background-color: #0d0a04;
+  border: 1px solid rgba(255, 176, 0, 0.5);
+  color: #ffb000;
+  transition: all 0.2s ease;
+}
+.term-btn-amber:hover {
+  background-color: rgba(255, 176, 0, 0.2);
+  border-color: #ffb000;
+  box-shadow: 0 0 10px rgba(255, 176, 0, 0.3);
+}
+
+.text-glow {
+  text-shadow: 0 0 8px rgba(0, 255, 102, 0.6), 0 0 16px rgba(0, 255, 102, 0.3);
+}
+
+.text-glow-amber {
+  text-shadow: 0 0 8px rgba(255, 176, 0, 0.6), 0 0 16px rgba(255, 176, 0, 0.3);
+}
+
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.35) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.03),
+    rgba(0, 255, 0, 0.01),
+    rgba(0, 255, 0, 0.03)
+  );
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+.crt-vignette {
+  background: radial-gradient(circle at center, transparent 75%, rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   STABLE & SMOOTH GLITCH TRANSITIONS (Fixed Position, No Jumping)
+   ========================================================================== */
+
+@keyframes microFlicker {
+  0% { opacity: 1; }
+  25% { opacity: 0.92; filter: brightness(1.15) contrast(1.1); }
+  50% { opacity: 1; filter: none; }
+  75% { opacity: 0.95; filter: brightness(0.9) contrast(1.15); }
+  100% { opacity: 1; filter: none; }
+}
+
+.glitch-micro-anim {
+  animation: microFlicker 0.25s linear infinite;
+}
+
+@keyframes crtTakeoverFlash {
+  0% { opacity: 0.85; filter: brightness(1.4) hue-rotate(90deg); }
+  50% { opacity: 0.95; filter: brightness(1.1); }
+  100% { opacity: 1; filter: none; }
+}
+
+.crt-takeover-anim {
+  animation: crtTakeoverFlash 0.5s ease-out forwards;
+}
+
+@keyframes signalBreach {
+  0% { opacity: 1; }
+  30% { opacity: 0.88; filter: contrast(1.3) brightness(1.2); }
+  60% { opacity: 0.95; filter: invert(0.1) contrast(1.2); }
+  100% { opacity: 1; filter: none; }
+}
+
+.major-tear-anim {
+  animation: signalBreach 0.45s ease-in-out infinite;
+}
+
+@keyframes modernRecovery {
+  0% { opacity: 0.85; filter: brightness(1.1); }
+  100% { opacity: 1; filter: none; }
+}
+
+.modern-recovery-anim {
+  animation: modernRecovery 0.4s ease-out forwards;
+}
+
+@keyframes beamSweep {
+  0% { top: -10%; opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { top: 110%; opacity: 0; }
+}
+
+.matrix-beam-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ff66, #33ff77, #00ff66, transparent);
+  box-shadow: 0 0 12px #00ff66;
+  animation: beamSweep 0.5s linear infinite;
+  pointer-events: none;
+}
+
+.cyber-beam-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #2563EB, #0284C7, transparent);
+  box-shadow: 0 0 12px #2563EB;
+  animation: beamSweep 0.5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes cursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: cursorBlink 0.9s step-start infinite;
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .glitch-micro-anim,
+  .crt-takeover-anim,
+  .major-tear-anim,
+  .modern-recovery-anim,
+  .matrix-beam-line,
+  .cyber-beam-line {
+    animation: none !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
