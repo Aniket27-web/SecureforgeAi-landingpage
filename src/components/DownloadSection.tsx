@@ -11,6 +11,8 @@ export const DownloadSection: React.FC = () => {
   const [isHovered, setIsHovered] = useState(false);
 
   const sha256Checksum = '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08';
+  const installerFileName = 'SecureForge.AI.Setup.1.0.0.exe';
+  const installerUrl = 'https://github.com/Aniket27-web/SecureforgeAi-landingpage/releases/download/EXE/SecureForge.AI.Setup.1.0.0.exe';
 
   const handleDownloadClick = () => {
     if (isDownloading) return;
@@ -23,42 +25,60 @@ export const DownloadSection: React.FC = () => {
     const progressSteps = [
       { p: 20, log: '> RESOLVING HOST: releases.secureforge.ai [ TLS 1.3 ]' },
       { p: 45, log: '> VERIFYING SHA-256 MANIFEST CHECKSUM...' },
-      { p: 70, log: '> DOWNLOADING SecureForgeAI.exe (x64 Windows Executable)...' },
+      { p: 70, log: `> DOWNLOADING ${installerFileName} (x64 Windows Executable)...` },
       { p: 90, log: '> STREAMING PAYLOAD: 142.4 MB / 142.4 MB' },
       { p: 100, log: '> DOWNLOAD COMPLETE. FILE INTEGRITY VERIFIED.' }
     ];
 
     let stepIdx = 0;
     const interval = setInterval(() => {
-      if (stepIdx < progressSteps.length) {
-        sound.playScanTick();
-        setDownloadProgress(progressSteps[stepIdx].p);
-        setDownloadLogs(prev => [...prev, progressSteps[stepIdx].log]);
-        stepIdx++;
-      } else {
+      const currentStep = progressSteps[stepIdx];
+
+      if (!currentStep) {
         clearInterval(interval);
         setIsDownloading(false);
         setDownloadComplete(true);
         sound.playSuccessChime();
 
-        // Trigger real client-side download of placeholder / simulated exe file
         try {
-          const blob = new Blob(
-            ['SecureForgeAI v1.0.0 Windows Executable Placeholder. Replace with production build binary.'],
-            { type: 'application/octet-stream' }
-          );
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = 'SecureForgeAI.exe';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
+          fetch(installerUrl)
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`Download failed with status ${response.status}`);
+              }
+              return response.blob();
+            })
+            .then((blob) => {
+              const objectUrl = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.style.display = 'none';
+              a.href = objectUrl;
+              a.download = installerFileName;
+              a.rel = 'noopener';
+              document.body.appendChild(a);
+              a.click();
+              a.remove();
+              window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+            })
+            .catch(() => {
+              const fallback = document.createElement('a');
+              fallback.style.display = 'none';
+              fallback.href = installerUrl;
+              fallback.download = installerFileName;
+              document.body.appendChild(fallback);
+              fallback.click();
+              fallback.remove();
+            });
         } catch (e) {
           console.error(e);
         }
+        return;
       }
+
+      sound.playScanTick();
+      setDownloadProgress(currentStep.p);
+      setDownloadLogs(prev => [...prev, currentStep.log]);
+      stepIdx += 1;
     }, 450);
   };
 
@@ -74,7 +94,7 @@ export const DownloadSection: React.FC = () => {
       {/* Command prompt */}
       <div className="flex items-center space-x-2 text-xs sm:text-sm font-bold text-[#00ff66] mb-4">
         <span>C:\SecureForgeAI&gt;</span>
-        <span className="text-[#33ff77] text-glow">download SecureForgeAI.exe --channel=stable</span>
+        <span className="text-[#33ff77] text-glow">download SecureForge.AI.Setup.1.0.0.exe --channel=stable</span>
       </div>
 
       <div className="max-w-5xl mx-auto space-y-8">
@@ -137,8 +157,8 @@ export const DownloadSection: React.FC = () => {
                   {downloadComplete
                     ? '[ ✓ DOWNLOAD COMPLETE — FILE SAVED ]'
                     : isDownloading
-                    ? '[ DOWNLOADING SecureForgeAI.exe... ]'
-                    : '[ ↓ DOWNLOAD SECUREFORGEAI.EXE ]'}
+                    ? `[ DOWNLOADING ${installerFileName}... ]`
+                    : '[ ↓ DOWNLOAD SECUREFORGE.AI.SETUP.1.0.0.EXE ]'}
                 </span>
               </div>
 
@@ -193,7 +213,7 @@ export const DownloadSection: React.FC = () => {
             <div className="space-y-1.5 pt-1">
               <div className="flex justify-between py-1 border-b border-[#00ff66]/10">
                 <span className="text-[#00ff66]/60">File Name:</span>
-                <span className="font-bold text-[#33ff77]">SecureForgeAI.exe</span>
+                <span className="font-bold text-[#33ff77]">SecureForge.AI.Setup.1.0.0.exe</span>
               </div>
               <div className="flex justify-between py-1 border-b border-[#00ff66]/10">
                 <span className="text-[#00ff66]/60">Operating System:</span>
